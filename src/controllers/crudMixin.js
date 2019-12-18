@@ -69,10 +69,10 @@ export default {
     async deleteOne (id) {
       this.loading.one = true
       const res = await api[this.pageName].deleteOne({ id })
-      if (res) {
-        return res
+      if (!res) {
+        this.loading.one = false
       }
-      this.loading.one = false
+      return res
     }
   }
 }

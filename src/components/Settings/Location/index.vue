@@ -85,6 +85,7 @@ export default {
         return
       }
       await this.$app.studios.updateOne({ id: studio, data: this.singleStudio })
+      await this.singleStudioM()
     },
     async newStudio () {
       this.isSave = true

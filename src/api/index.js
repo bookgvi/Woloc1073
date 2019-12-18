@@ -12,7 +12,7 @@ import promo from './promo'
 import { discounts } from './discounts'
 import { jswidget } from './jswidget'
 import { organizationNotes } from './organizationNotes'
-import { organizationSettings } from './organizationSettings'
+import { organization } from './organizationSettings'
 import { promocodes } from './promocodes'
 import search from './search'
 
@@ -31,7 +31,7 @@ export default {
   discounts,
   jswidget,
   organizationNotes,
-  organizationSettings,
+  organization,
   promocodes,
   search
 }

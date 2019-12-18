@@ -205,11 +205,10 @@ export default {
           return
         } else if (result.hasOwnProperty('data')) {
           this.showNotif('Данные сохранены!', 'green')
+          this.setCurrentRoom(result.data)
         }
-        this.rooms = await this.getAllRooms(this.currentRoomData.studio.id) // Обновляем список залов для блока слева
       }
       this.saveDefaultData()
-      this.reloadData++
     },
     leavePage () {
       this.isSomethingChanged = false

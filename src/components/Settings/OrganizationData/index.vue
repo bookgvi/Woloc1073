@@ -197,7 +197,7 @@ export default {
   },
   methods: {
     async getData () {
-      const { data } = await this.$app.organizationSettings.getOne()
+      const { data } = await this.$app.organization.getOne()
       if (!data.organization.name) return
       return data
     },
@@ -206,7 +206,7 @@ export default {
       this.employerProps = value
     },
     async saveChanges () {
-      const result = await this.$app.organizationSettings.updateOne(this.organization.id, this.organization)
+      const result = await this.$app.organization.updateOne({ id: this.organization.id, data: this.organization })
       if (result.hasOwnProperty('data') && result.data.hasOwnProperty('organization')) {
         this.showNotif('Изменения сохранены', 'green')
         this.extra = result.data.extra
