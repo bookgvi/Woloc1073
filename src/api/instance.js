@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { stringify } from 'qs'
-import { LocalStorage, Notify } from 'quasar'
+import { LocalStorage, Notify, Loading, QSpinnerGears } from 'quasar'
 
 const currentURL = (_ => {
   const currentURL = window.location
@@ -28,6 +28,10 @@ instance.defaults.headers.get['Accept'] = 'application/json'
 // request interceptor
 instance.interceptors.request.use(
   conf => {
+    Loading.show({
+      delay: 1000,
+      spinner: QSpinnerGears
+    })
     // Do something before request is sent
     const token = LocalStorage.getItem('user-token')
     if (token) {
@@ -45,6 +49,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => response,
   error => {
+    Loading.hide()
     const response = error.response
     // console.info('response error', response.data)// for debug
     if (response) {
