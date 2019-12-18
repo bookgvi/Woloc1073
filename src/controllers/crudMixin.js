@@ -34,18 +34,15 @@ export default {
       const { data } = await api[this.pageName].getAll(page, filter)
       if (data) {
         this.list = data.items || data
-        this.loading.list = false
       }
+      this.loading.list = false
       return data
     },
     async getOne (id) {
       this.loading.one = true
       const { data } = await api[this.pageName].getOne({ id })
-      if (data) {
-        this.loading.one = false
-        return data
-      }
       this.loading.one = false
+      return data
     },
     async addNew (payload) {
       this.loading.one = true
@@ -53,25 +50,25 @@ export default {
       const res = await api[this.pageName].addNew(payload)
       if (res) {
         this.idOfJustAdded = res.id
-        return res
       }
       this.loading.one = false
+      return res
     },
     async updateOne (payload) {
       this.loading.one = true
       const res = await api[this.pageName].updateOne(payload)
       if (res) {
         this.idOfJustAdded = res.id
-        return res
       }
       this.loading.one = false
+      return res
     },
     async deleteOne (id) {
       this.loading.one = true
       const res = await api[this.pageName].deleteOne({ id })
       if (!res) {
-        this.loading.one = false
       }
+      this.loading.one = false
       return res
     }
   }

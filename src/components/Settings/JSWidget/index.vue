@@ -129,7 +129,7 @@ export default {
         return
       }
       const result = await this.$app.jswidget.getOne(this.currentRoomId)
-      if (result !== 'error') {
+      if (result && result !== 'error') {
         this.rowsForWidget = 30
         const begin = result.slice(0, 11) + this.bookingSource
         const middle = result.slice(10, -16)
