@@ -11,7 +11,14 @@
       .col
         span Название зала&nbsp;
         span.text-red *
-        q-input.q-pt-sm(v-model="roomData.name" :rules="[val => !!val || 'Обязательно для заполнения']" outlined dense)
+        q-input.q-pt-sm(
+          class="name"
+          v-model="roomData.name"
+          :rules="[val => !!val || 'Обязательно для заполнения']"
+          lazy-rules
+          outlined
+          dense
+        )
     .row.q-pb-md
       span Цвет зала в календаре
     .row.items-center.q-pb-md
@@ -27,6 +34,7 @@
             .block
               q-color(
                 v-model="roomColorVM"
+                no-footer
                 style="width: 300px;"
               )
     .row.q-pb-md
@@ -35,21 +43,41 @@
         q-select(v-model="roomStatus" :options="statuses" outlined dense)
       .col-4.q-pr-sm
         span Тип зала
-        q-select(v-model="currentRoomType" :options="roomType" outlined dense)
+        q-select(
+          class="name"
+          :rules="[val => !!val || 'Обязательно для заполнения']"
+          lazy-rules
+          v-model="currentRoomType"
+          :options="roomType"
+          outlined
+          dense
+        )
       .col-4.q-pr-sm
         span Мин. кол-во часов&nbsp;
         span.text-red *
-        q-input(v-model="roomData.minHours" :rules="[val => !!val || 'Обязательно для заполнения']" outlined dense)
+        q-input(
+          class="minHours"
+          v-model="roomData.minHours"
+          :rules="[val => !!val || 'Обязательно для заполнения']"
+          lazy-rules
+          outlined
+          dense
+        )
     .row.q-pb-md
       span Опубликован и доступен для бронирования
     .row.q-pb-sm
       span Предоплата
     .row.q-pb-lg
       .col-7.q-pr-sm
-        q-select(v-model="needPrepayment" :options="prepay" outlined dense)
-      // TODO - Сделать позжее!!!!
-      // .col.q-pa-none
-        q-btn.bg-primary.text-white(label="Привязать google календарь" no-caps)
+        q-select(
+          class="needPrepayment"
+          :rules="[val => !!val || 'Обязательно для заполнения']"
+          lazy-rules
+          v-model="needPrepayment"
+          :options="prepay"
+          outlined
+          dense
+        )
 </template>
 
 <script>

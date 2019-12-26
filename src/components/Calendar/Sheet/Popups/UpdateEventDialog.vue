@@ -1,12 +1,13 @@
 <template lang="pug">
   q-dialog(
+    persistent
     v-model="dialogState"
   )
     q-card.q-py-md(
-      style="width: 330px"
+      style="width: 400px"
     )
       q-card-section.q-pa-none(
-        style="width: 330px"
+        style="width: 400px"
       )
         q-list.text-body2.text-black.text-weight-bold(
           dense
@@ -19,7 +20,8 @@
           )
             template(v-slot:header).row.items-center
               .col-4.q-py-sm
-                span {{ "Клиент" }}
+                span {{ "Клиент" }}&nbsp
+                span.text-red *
               .col-7.q-py-sm
                 span.text-grey {{ customerSlot }}
             calendar-customer.q-pa-md(
@@ -33,7 +35,8 @@
           )
             template(v-slot:header)
               .col-4.q-py-sm
-                span {{ "Зал" }}
+                span {{ "Зал" }}&nbsp
+                span.text-red *
               .col-7.q-py-sm
                 span.text-grey {{ roomSlot }}
             calendar-room.q-pa-md(
@@ -77,7 +80,8 @@
           )
             template(v-slot:header)
               .col-4.q-py-sm
-                span {{ "Цель" }}
+                span {{ "Цель" }}&nbsp
+                span.text-red *
               .col-7.q-py-sm
                 span.text-grey {{ eventSlot }}
             calendar-event.q-pa-md(
@@ -281,7 +285,16 @@ export default {
     setParamsForPost () {
       if (!this.newBooking.customer.fullName) {
         Notify.create({
-          message: `Выберите клиента`,
+          message: `Введите имя`,
+          color: 'negative',
+          position: 'bottom-left',
+          icon: 'warning'
+        })
+        return null
+      }
+      if (!this.newBooking.customer.email) {
+        Notify.create({
+          message: `Введите адрес эл. почты`,
           color: 'negative',
           position: 'bottom-left',
           icon: 'warning'
@@ -381,7 +394,15 @@ export default {
         priceType: this.newBooking.eventType,
         extras: extras,
         members: this.newBooking.members,
-        managerComment: this.newBooking.managerComment || ''
+        managerComment: this.newBooking.managerComment || '',
+        consumerId: this.newBooking.customer.id || null,
+        customer: {
+          fullName: this.newBooking.customer.fullName,
+          firstName: this.newBooking.customer.firstName || '',
+          phone: this.newBooking.customer.phone || '',
+          email: this.newBooking.customer.email || '',
+          id: this.newBooking.customer.id || null
+        }
       }
       // console.log('put', params)
       return {
@@ -396,7 +417,11 @@ export default {
       if (index === -1) {
         const payload = this.setParamsForPost()
         if (payload) {
-          await this.$app.bookings.addNew(payload)
+          const result = await this.$app.bookings.addNew(payload)
+          if (result && result.hasOwnProperty('errors')) {
+            this.showNotif('Проверьте поле с адресом электронной почты', 'orange')
+            return
+          }
           if (this.$app.bookings.idOfJustAdded !== 0) {
             this.$emit('setQueryState', true)
             this.$app.extras.extrasForRoom = []
@@ -413,6 +438,12 @@ export default {
         }
       }
       // console.log(9, this.newBooking.id, index)
+    },
+    showNotif (msg, clr = 'purple') {
+      this.$q.notify({
+        message: msg,
+        color: clr
+      })
     }
   },
   props: {

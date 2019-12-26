@@ -376,7 +376,7 @@ export default {
       })
       if (newBooking) {
         const id = item.id
-        await this.$app.bookings.updateOne(id, newBooking)
+        await this.$app.bookings.updateOne({ id: id, data: newBooking })
       }
       item.isResize = false
       await this.loadData()

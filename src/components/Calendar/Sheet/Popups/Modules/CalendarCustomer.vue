@@ -1,39 +1,56 @@
 <template lang="pug">
-  .col-12.row.justify-around.items-center
-    .col-12
-      q-select.text-body2.text-weight-bold(
-        outlined
-        fill-input
-        :disabled="!isCreate"
-        :readonly="!isCreate"
-        hide-selected
-        @filter="filterFn"
-        use-input
-        input-debounce="500"
-        hide-dropdown-icon
-        options-dense
-        placeholder="Пользователь"
-        :options="$app.customers.searched.slice(0, 10)"
-        :option-value="opt => opt === null ? '' : opt.fullName"
-        :option-label="opt => opt === null ? '' : opt.fullName"
-        v-model="customerName"
-        @input.native="inputNewCustomer"
-        new-value-mode="add"
+  .col
+    .row.q-pb-sm
+      .col
+        span Пользователь &nbsp
+        span.text-red *
+    .row
+      .col
+        q-select.text-body2.text-weight-bold(
+          outlined
+          fill-input
+          :disabled="!isCreate"
+          :readonly="!isCreate"
+          hide-selected
+          @filter="filterFn"
+          use-input
+          input-debounce="0"
+          hide-dropdown-icon
+          options-dense
+          placeholder="Пользователь"
+          :options="$app.customers.searched.slice(0, 10)"
+          :option-value="opt => opt === null ? '' : opt.fullName"
+          :option-label="opt => opt === null ? '' : opt.fullName"
+          v-model="customerName"
+          new-value-mode="add"
+          :rules="[val => !!val.fullName || 'Обязательно для заполнения']"
+          lazy-rules
         )
-    .col-12
-      q-input.text-body2.text-weight-bold(
-        outlined
-        mask="#(###)###-##-##"
-        unmasked-value
-        placeholder="Телефон"
-        v-model="phone"
-      )
-    .col-12
-      q-input.text-body2.text-weight-bold(
-        outlined
-        placeholder="Эл. почта"
-        v-model="email"
-      ) {{ customerComp }}
+    .row.q-pb-sm
+      .col
+        span Телефон
+    .row.q-pb-md
+      .col
+        q-input.text-body2.text-weight-bold(
+          outlined
+          mask="#(###)###-##-##"
+          unmasked-value
+          placeholder="Телефон"
+          v-model="phone"
+        )
+    .row.q-pb-sm
+      .col
+        span Эл. почта &nbsp
+        span.text-red *
+    .row
+      .col
+        q-input.text-body2.text-weight-bold(
+          outlined
+          placeholder="Эл. почта"
+          v-model="email"
+          :rules="[val => !!val || 'Обязательно для заполнения']"
+          lazy-rules
+        ) {{ customerComp }}
 </template>
 
 <script>
@@ -51,6 +68,9 @@ export default {
     }
   },
   computed: {
+    customerComp () {
+      return this.customerChange()
+    },
     customerName: {
       get () {
         return this.customer
@@ -64,9 +84,6 @@ export default {
           }
         }
       }
-    },
-    customerComp () {
-      return this.customerChange()
     },
     phone: {
       get () {
@@ -95,14 +112,9 @@ export default {
         return
       }
       await this.$app.customers.getForCalendar(val.toLowerCase())
-      update()
-    },
-    inputNewCustomer (e) {
-      if (!this.customerName.fullName) {
-        this.customerName.fullName = e.data
-      } else {
-        this.customerName.fullName += e.data
-      }
+      update(_ => {
+        this.customer.fullName = val
+      })
     }
   },
   props: {
@@ -114,13 +126,9 @@ export default {
   watch: {
     'startCustomer.customer': {
       handler (v) {
-        this.customer = v ? Object.assign(v)
-          : {
-            firstName: '',
-            fullName: '',
-            phone: '',
-            email: ''
-          }
+        if (v && v.hasOwnProperty('id') && v.id) {
+          this.customer = Object.assign(v)
+        }
       },
       immediate: true
     }

@@ -3,7 +3,7 @@ import roomMock from 'src/mocks/room'
 import { AbstractAPI } from './AbstractAPI'
 const API_URL = process.env.API_CABINET_URL
 export const room = new AbstractAPI(`${API_URL}/room`)
-room.getDefault = async function () {
+room.getDefaultPrices = async function () {
   const r = {
     data: Object.assign({}, roomMock)
   }

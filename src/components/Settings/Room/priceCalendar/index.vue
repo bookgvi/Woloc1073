@@ -14,7 +14,7 @@
           q-btn.q-mr-md(icon="local_play"  @click="price = 'event'")
       .col-6
         span Вместимость зала, человек
-        q-input(v-model="payment[price]['maxSeats']" outlined dense autofocus)
+        q-input(v-model="payment[price]['maxSeats']" outlined dense)
     .row.q-pb-lg.items-end
       .col.q-pr-sm
         span Гости без доплаты

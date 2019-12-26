@@ -16,13 +16,27 @@
       .col.q-pr-sm
         span Высота потолков, м&nbsp;
         span.text-red *
-        q-input(v-model="specification.height" :rules="[val => !!val || 'Обязательно для заполнения']" outlined dense)
+        q-input(
+          class="height"
+          v-model="specification.height"
+          :rules="[val => !!val || 'Обязательно для заполнения']"
+          lazy-rules
+          outlined
+          dense
+        )
       .col
         span(style="line-height: 0;") Площадь, м
           sup 2
         span &nbsp;
         span.text-red *
-        q-input(v-model="specification.yardage" :rules="[val => !!val || 'Обязательно для заполнения']" outlined dense)
+        q-input(
+          class="yardage"
+          v-model="specification.yardage"
+          :rules="[val => !!val || 'Обязательно для заполнения']"
+          lazy-rules
+          outlined
+          dense
+        )
     abstract-list(:dataArray="specification.characteristics")
 
 </template>

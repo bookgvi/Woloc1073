@@ -16,7 +16,7 @@
          :title="value.name"
         ) {{ value.name || value.title}}
       template(v-else-if="name === 'rooms'")
-        q-chip(
+        q-chip.q-pa-sm(
           v-for="item in value"
           :key="item.id"
           dense
@@ -160,6 +160,8 @@ export default {
 <style lang="stylus">
   tr.disabled
     opacity .2
+  .q-table thead, .q-table td, .q-table th
+    border-width 0px
   .q-table tbody tr
     .active
       cursor: pointer
@@ -171,9 +173,15 @@ export default {
         text-overflow ellipsis
         overflow hidden
         display block
-    .rooms-col .q-chip
-      width 100px
-      border-radius 3px
+    .rooms-col
+      max-width 400px
+      overflow hidden
+      text-overflow ellipsis
+      .q-chip
+        border-radius 3px
+        max-width 100px
+        overflow hidden
+        text-overflow ellipsis
       .q-chip__content
         white-space nowrap
         text-overflow ellipsis

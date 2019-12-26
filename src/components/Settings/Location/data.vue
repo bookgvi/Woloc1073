@@ -6,8 +6,11 @@
         span Название &nbsp
         span.text-red *
         q-input.q-pt-sm(
+          class="name"
           v-model="singleStudio.name"
           placeholder="Название студии"
+          :rules="[val => !!val || 'Обязательно для заполнения']"
+          lazy-rules
           outlined
           dense
         )
@@ -16,18 +19,30 @@
         span Телефон &nbsp
         span.text-red *
         q-input.q-pt-sm(
+          class="phone"
           v-model="singleStudio.phone"
           placeholder="+7 (800) 800 0123"
           mask="+# (###) ### ####"
           unmasked-value
           type="tel"
+          :rules="[val => !!val || 'Обязательно для заполнения']"
+          lazy-rules
           outlined
           dense
         )
       .col
         span Эл. почта &nbsp
         span.text-red *
-        q-input.q-pt-sm(v-model="singleStudio.email" placeholder="email@doamin.com" type="email" outlined dense)
+        q-input.q-pt-sm(
+          class="email"
+          v-model="singleStudio.email"
+          placeholder="email@doamin.com"
+          type="email"
+          :rules="[val => !!val || 'Обязательно для заполнения']"
+          lazy-rules
+          outlined
+          dense
+        )
     .row.q-pb-sm
       q-checkbox(v-model="singleStudio.hidden" label="Скрыть локацию" dense)
     .row

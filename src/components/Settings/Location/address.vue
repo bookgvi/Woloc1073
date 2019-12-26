@@ -5,11 +5,14 @@
     .row.q-pb-lg
       .col-8.q-pr-sm
         q-select(
+          class="address"
           v-model="singleStudio.address"
           :options="fullAddressArr"
           @input.native="getFullAddress($event)"
           @keyup.native.enter="showOnMap"
           @filter="emptyFilter"
+          :rules="[val => !!val || '* Обязательно для заполнения']"
+          lazy-rules
           use-input
           fill-input
           display-value
@@ -33,11 +36,11 @@
         style="width: 100%; height: 480px"
         @click="setAddress"
       )
-        ymap-marker(
+        ymapMarker(
           v-if="isMarker"
-          marker-id="1"
+          marker-id="singleStudio.id"
           :coords="markerCoords"
-          :balloon="{ header: 'First' }"
+          :hint-content="singleStudio.name"
         )
     .row.q-pb-lg
       .col
@@ -78,6 +81,7 @@ export default {
   data () {
     return {
       isMarker: false,
+      defaultAddress: 'г Москва, ул Кремль',
       fullAddressArr: [],
       yControls: [],
       options: {
@@ -115,18 +119,18 @@ export default {
     },
     async showOnMap () {
       this.isMarker = false
-      await axios.get(`https://geocode-maps.yandex.ru/1.x/`, {
+      const { data } = await axios.get(`https://geocode-maps.yandex.ru/1.x/`, {
         params: {
           apikey: this.options.yaMap.yAPI,
           format: 'json',
-          geocode: this.singleStudio.address
+          geocode: this.singleStudio.address || this.defaultAddress
         }
-      }).then(resp => {
-        this.singleStudio.lon = +resp.data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(' ')[0]
-        this.singleStudio.lat = +resp.data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(' ')[1]
       })
-        .catch(err => { console.error('Catched...', err) })
-      this.isMarker = true
+      this.singleStudio.lon = +data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(' ')[0]
+      this.singleStudio.lat = +data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(' ')[1]
+      this.$nextTick(_ => {
+        this.isMarker = true
+      })
     },
     async setAddress (e) {
       this.isMarker = false
